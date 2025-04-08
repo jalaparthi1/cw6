@@ -1,0 +1,2 @@
+/Users/joshikaalaparthi/Downloads/CourseWork06_TaskApp_Firebase-main/android/app/.cxx/RelWithDebInfo/2t3h3u4l/x86_64/CMakeFiles/edit_cache.dir
+/Users/joshikaalaparthi/Downloads/CourseWork06_TaskApp_Firebase-main/android/app/.cxx/RelWithDebInfo/2t3h3u4l/x86_64/CMakeFiles/rebuild_cache.dir
