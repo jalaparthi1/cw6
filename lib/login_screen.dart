@@ -11,50 +11,149 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>(); // To handle form validation
 
   Future<void> login() async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => TaskListScreen()));
+      if (_formKey.currentState!.validate()) {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => TaskListScreen()));
+      }
     } catch (e) {
       print('Login failed: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed. Please check your credentials.')),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+      backgroundColor: Colors.blueAccent, // Background color for a fresh look
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey, // Connect form key to handle validation
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // App Logo or App Name (optional)
+                    Text(
+                      'Task Manager',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 30),
+
+                    // Email TextField
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        labelStyle: TextStyle(color: Colors.white),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        if (!RegExp(r"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")
+                            .hasMatch(value)) {
+                          return 'Please enter a valid email';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 20),
+
+                    // Password TextField
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        labelStyle: TextStyle(color: Colors.white),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      ),
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 30),
+
+                    // Login Button
+                    ElevatedButton(
+                      onPressed: login,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green, // Button color
+                        padding:
+                            EdgeInsets.symmetric(vertical: 15, horizontal: 60),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Login',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                    SizedBox(height: 15),
+
+                    // Text Button for Sign Up
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignupScreen()),
+                        );
+                      },
+                      child: Text(
+                        'Create an account',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+
+                    // Optional footer text (e.g., app version or contact info)
+                    Text(
+                      'Version 1.0.0',
+                      style: TextStyle(color: Colors.white70),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: login,
-              child: Text('Login'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SignupScreen()));
-              },
-              child: Text('Create an account'),
-            ),
-          ],
+          ),
         ),
       ),
     );
