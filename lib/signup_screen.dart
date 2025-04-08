@@ -59,7 +59,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       controller: _emailController,
                       decoration: InputDecoration(
                         labelText: 'Email',
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: TextStyle(color: Colors.blueAccent),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -88,7 +88,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       controller: _passwordController,
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: TextStyle(color: Colors.blueAccent),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(

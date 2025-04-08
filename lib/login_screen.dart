@@ -11,7 +11,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>(); // To handle form validation
+  final _formKey = GlobalKey<FormState>(); // For form validation
 
   Future<void> login() async {
     try {
@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       print('Login failed: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed. Please check your credentials.')),
+        SnackBar(content: Text('Login failed. Please try again.')),
       );
     }
   }
@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // App Logo or App Name (optional)
+                    // App Name or Logo (optional)
                     Text(
                       'Task Manager',
                       style: TextStyle(
@@ -54,14 +54,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: 40),
 
-                    // Email TextField
+                    // Email TextField with Validation
                     TextFormField(
                       controller: _emailController,
                       decoration: InputDecoration(
                         labelText: 'Email',
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: TextStyle(color: Colors.blueAccent),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email';
                         }
-                        if (!RegExp(r"^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")
+                        if (!RegExp(r"^[a-zA-Z0-9+_.-]+@[a-zA0-9.-]+$")
                             .hasMatch(value)) {
                           return 'Please enter a valid email';
                         }
@@ -85,12 +85,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: 20),
 
-                    // Password TextField
+                    // Password TextField with Validation
                     TextFormField(
                       controller: _passwordController,
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: TextStyle(color: Colors.blueAccent),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -104,6 +104,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
+                        }
+                        if (value.length < 6) {
+                          return 'Password must be at least 6 characters long';
                         }
                         return null;
                       },
@@ -128,14 +131,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(height: 15),
 
-                    // Text Button for Sign Up
+                    // Text Button to navigate to the Signup screen
                     TextButton(
                       onPressed: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignupScreen()),
-                        );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignupScreen()));
                       },
                       child: Text(
                         'Create an account',

@@ -15,6 +15,13 @@ class _TaskListScreenState extends State<TaskListScreen> {
   String? _filterPriority;
   bool showOnlyCompleted = false;
 
+  // This map will be used to map the priority string to a number for sorting
+  final Map<String, int> priorityMap = {
+    'High': 1,
+    'Medium': 2,
+    'Low': 3,
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,6 +185,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
         'name': _taskController.text,
         'completed': false,
         'priority': _selectedPriority,
+        'priorityValue':
+            priorityMap[_selectedPriority], // Store the numeric value
         'dueDate': DateTime.now(),
       });
       _taskController.clear();
@@ -210,7 +219,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
     switch (_sortOption) {
       case 'Priority':
-        query = query.orderBy('priority', descending: false);
+        query = query.orderBy('priorityValue',
+            descending: false); // Sorting by numeric value
         break;
       case 'Due Date':
         query = query.orderBy('dueDate');
